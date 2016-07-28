@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ROUTER_DIRECTIVES } from '@angular/router';
 import { HTTP_PROVIDERS } from '@angular/http';
 
-import { Config, NameListService, PollService, NavbarComponent, ToolbarComponent } from './shared/index';
+import { Config, AuthenticationService, NameListService, PollService, NavbarComponent, ToolbarComponent } from './shared/index';
 
 //require('bootstrap');
 
@@ -13,7 +13,7 @@ import { Config, NameListService, PollService, NavbarComponent, ToolbarComponent
 @Component({
   moduleId: module.id,
   selector: 'sd-app',
-  viewProviders: [NameListService, PollService, HTTP_PROVIDERS],
+  viewProviders: [NameListService, AuthenticationService, PollService, HTTP_PROVIDERS],
   templateUrl: 'app.component.html',
   directives: [ROUTER_DIRECTIVES, NavbarComponent, ToolbarComponent]
 })

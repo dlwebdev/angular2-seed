@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { REACTIVE_FORM_DIRECTIVES } from '@angular/forms';
 
 import { PollService } from '../shared/index';
+import { AuthenticationService } from '../shared/index';
 
 /**
  * This class represents the lazy loaded PollsComponent.
@@ -36,7 +37,7 @@ export class PollsComponent implements OnInit {
    *
    * @param {PollService} pollService - The injected PollService.
    */
-  constructor(public pollService: PollService) {
+  constructor(public pollService: PollService, private authenticationService: AuthenticationService) {
     this.resetPollData();
   }
 
@@ -44,6 +45,7 @@ export class PollsComponent implements OnInit {
    * Get the names OnInit
    */
   ngOnInit() {
+    this.authenticationService.checkCredentials();
     this.getPolls();
   }
 
@@ -93,7 +95,10 @@ export class PollsComponent implements OnInit {
         polls => this.polls = polls,
         error =>  this.errorMessage = <any>error
       );
-
   }
+
+  logout() {
+      this.authenticationService.logout();
+  }  
 
 }
