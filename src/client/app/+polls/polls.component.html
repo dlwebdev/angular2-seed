@@ -1,0 +1,56 @@
+<!--
+<pre>
+	{{ polls | json}}
+</pre>
+-->
+
+<div class="container">	
+	<div class="jumbotron">	
+		<h1>Polling System</h1>
+		<h2>Current Polls (WILL BE behind login)</h2>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-6 col-sm-offset-3">
+			<span>View All Polls</span>
+			<br>
+			<table class="table table-bordered">
+        		<thead>
+	          		<tr>
+	          			<th class="text-center">There are {{polls.length}} Current Polls</th>							
+	          		</tr>  
+          		</thead> 
+          		<tbody>
+					<tr *ngFor="let poll of polls">
+						<td>
+							<input type="checkbox" (click)="deletePoll(poll._id)" bind-checked="false">&nbsp;{{ poll.name }}
+						</td>
+					</tr>          			
+          		</tbody>         	
+			</table>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-6 col-sm-offset-3">
+			<form (ngSubmit)='createPoll()'>
+				<div class="form-group">
+					<input type="text" class="form-control input-lg" placeholder='Name for this poll' [(ngModel)]="pollData.name" [ngModelOptions]="{standalone: true}" required>
+					<br>
+					<div *ngFor="let option of pollData.options">
+						<input type="text" [(ngModel)]="option.text" [ngModelOptions]="{standalone: true}" placeholder="new option"/>
+					</div>					
+				</div>
+
+				<div class="form-group text-center">
+					<br>
+					<input class="btn btn-default btn-lg" type="button" (click)="addPollOption()" value="Add Poll Option">
+          			<br>
+          			<br>
+          			<input type="submit" class="btn btn-success btn-lg" value="Save">
+				</div>
+			</form>
+		</div>
+	</div>
+
+</div>
