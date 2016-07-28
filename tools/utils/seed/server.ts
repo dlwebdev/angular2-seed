@@ -140,7 +140,10 @@ export function serveProd() {
   });
 
   server.get('/api/polls/:id', function(req, res) {
-    return res.send('API Route to get a poll with id of: ' + req.params.id);         
+    let id = req.params.id;
+    Poll.findOne({'_id':id},function(err, result) {
+      return res.send(result);
+    });             
   });
 
   server.put('/api/polls/:id', function(req, res) {
@@ -155,7 +158,7 @@ export function serveProd() {
           res.json(polls);
       });      
     });    
-    
+
   });  
 
   // -------------- USERS ROUTES --------------------

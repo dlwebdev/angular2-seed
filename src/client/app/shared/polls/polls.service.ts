@@ -30,6 +30,12 @@ export class PollService {
                     .catch(this.handleError);
   }  
 
+  getPoll(id:string): Observable<string[]> {
+    return this.http.get('/api/polls/' + id)
+                    .map((res: Response) => res.json())
+                    .catch(this.handleError);
+  }   
+
   postNewPoll(data:Object): Observable<string[]> {
     let headers = new Headers({
       'Content-Type': 'application/json'});

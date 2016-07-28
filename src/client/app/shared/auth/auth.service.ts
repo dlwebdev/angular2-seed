@@ -38,12 +38,11 @@ export class AuthenticationService {
     console.log('User passed to login: ', user);
 
     var authenticatedUser = users.find(u => u.email === user.email);
-    //var authenticatedUser = users.find(u => u.email === 'user1@gmail.com');
+    
     console.log('Authenticated User: ', authenticatedUser);
 
     if (authenticatedUser && authenticatedUser.password === user.password) {
-      //localStorage.setItem('user', authenticatedUser);
-      localStorage.setItem('user', '');
+      localStorage.setItem('user', JSON.stringify(authenticatedUser));
       this._router.navigate(['Home']);      
       return true;
     }
@@ -53,7 +52,7 @@ export class AuthenticationService {
 
   checkCredentials() {
     if (localStorage.getItem('user') === null) {
-        this._router.navigate(['']);
+        this._router.navigate(['login']);
     }
   }
 
