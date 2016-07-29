@@ -12,6 +12,7 @@
     "chokidar": "github:DefinitelyTyped/DefinitelyTyped/chokidar/chokidar.d.ts#ae81e340a9e897167cfef3122a5a3aed04293814",
     "core-js": "registry:dt/core-js#0.0.0+20160317120654",
     "express": "github:DefinitelyTyped/DefinitelyTyped/express/express.d.ts#5c3e47967affa3c4128a3875d1664ba206ae1b0f",
+    "d3": "github:DefinitelyTyped/DefinitelyTyped/d3/d3.d.ts#5c3e47967affa3c4128a3875d1664ba206ae1b0f",
     "mongoose": "github:DefinitelyTyped/DefinitelyTyped/mongoose/mongoose.d.ts#5c3e47967affa3c4128a3875d1664ba206ae1b0f",
     "body-parser": "github:DefinitelyTyped/DefinitelyTyped/body-parser/body-parser.d.ts",
     "glob": "github:DefinitelyTyped/DefinitelyTyped/glob/glob.d.ts#5c3e47967affa3c4128a3875d1664ba206ae1b0f",
