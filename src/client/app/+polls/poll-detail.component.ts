@@ -31,7 +31,7 @@ export class PollDetailComponent implements OnInit, OnDestroy {
   options: any;
   data: any;
   data2: any;  
-  currentVote: number;
+  currentVote: any;
 
   /**
    * Creates an instance of the PollsComponent with the injected
@@ -94,7 +94,7 @@ export class PollDetailComponent implements OnInit, OnDestroy {
         y: function(d:any){return d.val;},
         showValues: true,
         valueFormat: function(d:any){
-          return d3.format(',.4f')(d);
+          return d3.format(',.0f')(d);
         },
         duration: 500,
         xAxis: {
@@ -162,10 +162,12 @@ export class PollDetailComponent implements OnInit, OnDestroy {
   incrementVote() {
     // Vote on an option in this poll. Update the poll to persist vote
 
+    //console.log('Incrementing Vote for poll id of: ', this.pollId);
+
     this.pollService.updatePoll(this.pollId, this.poll)
       .subscribe(
         poll => {
-          this.poll = poll;
+          //this.poll = poll;
           console.log('Poll returned: ', poll);
         },
         error =>  this.errorMessage = <any>error

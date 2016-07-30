@@ -37,14 +37,14 @@ export class PollService {
   }   
 
   updatePoll(id:string, poll:Object): Observable<string[]> {
-    let headers = new Headers({
-      'Content-Type': 'application/json'});
+    let headers = new Headers({'Content-Type': 'application/json'});
 
     console.log('Updating poll: ', poll);
 
     return this.http.put('/api/polls/' + id, JSON.stringify(poll), {
       headers: headers
     }).map((res) => res.json().poll);
+
   } 
 
   postNewPoll(data:Object): Observable<string[]> {

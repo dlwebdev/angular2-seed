@@ -38,8 +38,7 @@ export class HomeComponent implements OnInit {
   }
 
   showPollDetail(id: string) {
-    console.log('Will send to poll detail with poll of: ', id);
-
+    //console.log('Will send to poll detail with poll of: ', id);
     let link = ['/poll-detail', id];
     this.router.navigate(link);    
   }
