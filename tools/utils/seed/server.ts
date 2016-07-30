@@ -147,7 +147,17 @@ export function serveProd() {
   });
 
   server.put('/api/polls/:id', function(req, res) {
-    return res.send('API Route to get a poll with id of: ' + req.params.id);
+    //return res.send('API Route to get a poll with id of: ' + req.params.id);
+
+    let id = req.params.id;
+    let updates = req.body;
+
+    Poll.update({"_id":id}, req.body,
+      function (err, numberAffected) {
+        if (err) return console.log(err);
+        console.log('Updated %d polls', numberAffected);
+        return res.send(202);
+    });    
   });
 
   server.delete('/api/polls/:id', function(req, res) {

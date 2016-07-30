@@ -109,7 +109,7 @@ export class PollDetailComponent implements OnInit, OnDestroy {
 
     this.data = [
       {
-        key: 'Cumulative Return',
+        key: 'Vote Total',
         values: this.poll.options
       }
     ];
