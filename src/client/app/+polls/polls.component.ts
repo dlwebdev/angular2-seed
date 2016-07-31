@@ -63,7 +63,7 @@ export class PollsComponent implements OnInit {
   }
 
   viewPoll(id:number) {
-    let link = ['/polls/' + id];
+    let link = ['/manage', id];
     this.router.navigate(link);
   }  
 
