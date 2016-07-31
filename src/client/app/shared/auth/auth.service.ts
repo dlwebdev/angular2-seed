@@ -43,7 +43,7 @@ export class AuthenticationService {
 
     if (authenticatedUser && authenticatedUser.password === user.password) {
       localStorage.setItem('user', JSON.stringify(authenticatedUser));
-      this._router.navigate(['Home']);      
+      this._router.navigate(['polls']);      
       return true;
     }
 

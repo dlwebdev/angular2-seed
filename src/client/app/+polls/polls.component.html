@@ -5,33 +5,40 @@
 -->
 
 <div class="container">	
+	<!--
 	<div class="jumbotron">	
 		<h1>Polling System</h1>
 		<h2>Current Polls (WILL BE behind login)</h2>
 	</div>
+	-->
 
 	<div class="row">
 		<div class="col-sm-6 col-sm-offset-3">
-			<span>View All Polls</span>
-			<br>
-			<table class="table table-bordered">
-        		<thead>
-	          		<tr>
-	          			<th class="text-center">There are {{polls.length}} Current Polls</th>							
-	          		</tr>  
-          		</thead> 
-          		<tbody>
-					<tr *ngFor="let poll of polls">
-						<td>
-							<input type="checkbox" (click)="deletePoll(poll._id)" bind-checked="false">&nbsp;{{ poll.name }}
-						</td>
-					</tr>          			
-          		</tbody>         	
-			</table>
+			<h2 class="text-center text-primary">Your Current Polls</h2>
+			
+			<!--<div class="text-center">You have {{ polls.length }} Polls. You can view the current results or delete any of your polls shown.</div>-->
+
+			<div class="list-group poll-list">
+				<div *ngFor="let poll of polls" class="list-group-item row">
+					<div class="col-md-10">
+						<span class="poll-name">{{ poll.name }}</span>
+					</div>
+					<div class="col-md-2">
+						<span class="edit-poll">
+							<span (click)="viewPoll(poll._id)" class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+						</span>
+						<span class="delete-poll" (click)="deletePoll(poll._id)">
+							<span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>
+						</span>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 
 	<div class="row">
+		<h2 class="text-center">Create a New Poll</h2>
+
 		<div class="col-sm-6 col-sm-offset-3">
 			<form (ngSubmit)='createPoll()'>
 				<div class="form-group">

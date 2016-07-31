@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { REACTIVE_FORM_DIRECTIVES } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { PollService } from '../shared/index';
 import { AuthenticationService } from '../shared/index';
@@ -37,7 +38,7 @@ export class PollsComponent implements OnInit {
    *
    * @param {PollService} pollService - The injected PollService.
    */
-  constructor(public pollService: PollService, private authenticationService: AuthenticationService) {
+  constructor(public pollService: PollService, private authenticationService: AuthenticationService, private router: Router) {
     this.resetPollData();
   }
 
@@ -60,6 +61,11 @@ export class PollsComponent implements OnInit {
         error =>  this.errorMessage = <any>error
       );
   }
+
+  viewPoll(id:number) {
+    let link = ['/polls/' + id];
+    this.router.navigate(link);
+  }  
 
   createPoll() {
     console.log('Poll Data: ', this.pollData);

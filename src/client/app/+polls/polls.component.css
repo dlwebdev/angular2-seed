@@ -4,10 +4,27 @@
 }
 
 input {
-  width: 250px;
+  width: 100%;
 }
 
 ul {
   list-style-type: none;
   padding: 0 0 0 8px;
+}
+
+.poll-list .glyphicon {
+	cursor:pointer;
+	font-size:20px;
+}
+
+.poll-list .glyphicon-info-sign {
+	color: #106cc8;
+}
+
+.poll-list .glyphicon-remove-sign{
+	color: red;
+}
+
+.poll-list .glyphicon:hover {
+	color: #000;
 }

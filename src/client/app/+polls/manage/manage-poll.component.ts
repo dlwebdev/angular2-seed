@@ -7,7 +7,7 @@ import 'nvd3';
 import { nvD3 } from 'ng2-nvd3';
 declare let d3: any;
 
-import { PollService } from '../shared/index';
+import { PollService } from '../../shared/index';
 
 /**
  * This class represents the lazy loaded PollsComponent.
@@ -15,24 +15,18 @@ import { PollService } from '../shared/index';
 @Component({
   moduleId: module.id,
   selector: 'sd-polls',
-  templateUrl: 'poll-detail.component.html',
-  styleUrls: ['poll-detail.component.css'],
+  templateUrl: 'manage-poll.component.html',
+  styleUrls: ['manage-poll.component.css'],
   directives: [REACTIVE_FORM_DIRECTIVES, ROUTER_DIRECTIVES, nvD3]
 })
-export class PollDetailComponent implements OnInit, OnDestroy {
-
-  newName: string = '';
-  showVotingContainer: boolean = true;
-  errorMessage: string;
+export class ManagePollComponent implements OnInit, OnDestroy {
+  //errorMessage: string;
+  //poll: any;
+  //pollId: string;
   sub: any;
-  navigated = false; // true if navigated here
-  poll: any;
-  pollId: string;
-
-  options: any;
-  data: any;
-  data2: any;  
-  currentVote: any;
+  //navigated: any;
+  //options: any;
+  //data: any;  
 
   /**
    * Creates an instance of the PollsComponent with the injected
@@ -45,6 +39,15 @@ export class PollDetailComponent implements OnInit, OnDestroy {
   /**
    * Get the names OnInit
    */
+  ngOnInit() {
+   console.log('Init');
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
+  }    
+
+  /* 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
       if (params['id'] !== undefined) {
@@ -111,34 +114,6 @@ export class PollDetailComponent implements OnInit, OnDestroy {
       }
     ];
 
-    this.data2 = [
-      {
-        key: 'Cumulative Return',
-        values: [
-          {
-            'text' : 'A',
-            'val' : -29.765957771107
-          },
-          {
-            'text' : 'B',
-            'val' : 0
-          },
-          {
-            'text' : 'C',
-            'val' : 32.807804682612
-          }
-        ]
-      }
-    ];
-
-  }
-
-  castVote() {
-    this.showVotingContainer = false;
-    this.poll.options[this.currentVote].val++;
-
-    this.incrementVote();
-    this.setChart();
   }
 
   cancel() {
@@ -147,26 +122,6 @@ export class PollDetailComponent implements OnInit, OnDestroy {
     let link = ['/'];
     this.router.navigate(link);     
   }  
-
-  setCurrentVote(i:any) {
-    //console.log('Increment count for option at index: ', i);
-    this.currentVote = i;
-  }
-
-  incrementVote() {
-    // Vote on an option in this poll. Update the poll to persist vote
-
-    //console.log('Incrementing Vote for poll id of: ', this.pollId);
-
-    this.pollService.updatePoll(this.pollId, this.poll)
-      .subscribe(
-        poll => {
-          //this.poll = poll;
-          console.log('Poll returned: ', poll);
-        },
-        error =>  this.errorMessage = <any>error
-      );    
-  }
 
   getPollData(id:any) {
     //console.log('Getting poll data for id of: ', id);
@@ -180,5 +135,7 @@ export class PollDetailComponent implements OnInit, OnDestroy {
         error =>  this.errorMessage = <any>error
       );
   }
+
+  */
 
 }
