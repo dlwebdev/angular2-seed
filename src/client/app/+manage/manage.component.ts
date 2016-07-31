@@ -31,11 +31,10 @@ export class ManagePollComponent implements OnInit, OnDestroy {
 
   options: any;
   data: any;
-  data2: any;  
   currentVote: any;
 
   /**
-   * Creates an instance of the PollsComponent with the injected
+   * Creates an instance of the ManagePollComponent with the injected
    * PollService.
    *
    * @param {PollService} pollService - The injected PollService.
@@ -73,6 +72,48 @@ export class ManagePollComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   } 
 
+  setChart() {
+    this.options = {
+      chart: {
+        type: 'discreteBarChart',
+        height: 450,
+        margin : {
+          top: 20,
+          right: 20,
+          bottom: 50,
+          left: 55
+        },
+        x: function(d:any){return d.text;},
+        y: function(d:any){return d.val;},
+        showValues: true,
+        valueFormat: function(d:any){
+          return d3.format(',.0f')(d);
+        },
+        duration: 500,
+        xAxis: {
+          axisLabel: ''
+        },
+        yAxis: {
+          axisLabel: 'Votes',
+          axisLabelDistance: -10
+        }
+      }
+    };
+
+    this.data = [
+      {
+        key: 'Vote Total',
+        values: this.poll.options
+      }
+    ];    
+
+  }  
+
+  cancel() {
+    let link = ['/polls'];
+    this.router.navigate(link);     
+  }    
+
   getPollData(id:any) {
     //console.log('Getting poll data for id of: ', id);
 
@@ -80,7 +121,7 @@ export class ManagePollComponent implements OnInit, OnDestroy {
       .subscribe(
         poll => {
           this.poll = poll;
-          //console.log('Poll returned: ', poll);
+          this.setChart();
         },
         error =>  this.errorMessage = <any>error
       );
