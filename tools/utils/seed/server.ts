@@ -5,15 +5,8 @@ import * as openResource from 'open';
 import { resolve } from 'path';
 import * as serveStatic from 'serve-static';
 
-//import * as passport from 'passport';
 let passport       = require('passport');
-//import * as passportConfig from './passport';
-
 require('./passport')(passport);
-
-//let TwitterStrategy = require('passport-twitter').Strategy;
-
-//let passportConfig = require('./tools/config/passport'); // all passport configuration and provider logic
 
 import * as mongoose from 'mongoose'; // Wrapper for interacting with MongoDB
 import * as bodyParser from 'body-parser'; 
@@ -223,11 +216,47 @@ export function serveProd() {
 
   app.get('/api/users/:id', function(req, res) {
     // Return all users
-    return res.send('User Specific API for user with id of: ' + req.params.id);
+    let id = req.params.id;
+    User.findOne({'_id':id},function(err, result) {
+      return res.send(result);
+    }); 
   });  
 
   // END API ROUTES
   // ************************************************
+
+  // route for showing the profile page
+  app.get('/user/profile', isLoggedIn, function(req, res) {
+    //return res.send('API Route to DELETE a poll with id of: ' + req.params.id);
+    /*
+      res.render('profile.ejs', {
+          user : req.user // get the user out of session and pass to template
+      });
+    */
+  });
+
+      // route for logging out
+  app.get('/user/logout', function(req, res) {
+      req.logout();
+      res.redirect('/');
+  });
+
+  // Twitter Auth API
+
+  // =====================================
+  // TWITTER ROUTES ======================
+  // =====================================
+  // route for twitter authentication and login
+  app.get('/auth/twitter', passport.authenticate('twitter'));
+
+  // handle the callback after twitter has authenticated the user
+  app.get('/auth/twitter/callback',
+      passport.authenticate('twitter', {
+          successRedirect : '/polls',
+          failureRedirect : '/login'
+      }));
+
+  // End Twitter Auth
 
 
   app.use(APP_BASE, serveStatic(root));
@@ -241,3 +270,13 @@ export function serveProd() {
     openResource('http://localhost:' + PORT + APP_BASE)
   );
 };
+
+function isLoggedIn(req:any, res:any, next:any) {
+
+    // if user is authenticated in the session, carry on
+    if (req.isAuthenticated())
+        return next();
+
+    // if they aren't redirect them to the home page
+    res.redirect('/');
+}

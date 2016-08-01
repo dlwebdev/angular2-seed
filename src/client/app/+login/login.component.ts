@@ -32,4 +32,10 @@ export class LoginComponent {
       }
   }
 
+  twitterLogin() {
+      if(!this._service.twitterLogin(this.user)) {
+        this.errorMsg = 'Failed to login';
+      }
+  }  
+
 }
