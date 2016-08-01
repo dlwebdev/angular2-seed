@@ -1,8 +1,19 @@
 import * as express from 'express';
+let session        = require('express-session');
 import * as fallback from 'express-history-api-fallback';
 import * as openResource from 'open';
 import { resolve } from 'path';
 import * as serveStatic from 'serve-static';
+
+//import * as passport from 'passport';
+let passport       = require('passport');
+//import * as passportConfig from './passport';
+
+require('./passport')(passport);
+
+//let TwitterStrategy = require('passport-twitter').Strategy;
+
+//let passportConfig = require('./tools/config/passport'); // all passport configuration and provider logic
 
 import * as mongoose from 'mongoose'; // Wrapper for interacting with MongoDB
 import * as bodyParser from 'body-parser'; 
@@ -29,6 +40,10 @@ const pollSchema = new Schema({
   user: {type: Schema.Types.ObjectId, ref: 'User'}
 });
 const Poll = mongoose.model('pollSchema', pollSchema); 
+
+// load the auth variables
+require('./auth');
+
 
 /**
  * Serves the Single Page Application. More specifically, calls the `listen` method, which itself launches BrowserSync.
@@ -86,16 +101,20 @@ export function serveCoverage() {
 }
 
 /**
- * Starts a new `express` server, serving the built files from `dist/prod`.
+ * Starts a new `express` app, serving the built files from `dist/prod`.
  */
 export function serveProd() {
   let root = resolve(process.cwd(), PROD_DEST);
-  let server = express();
+  let app = express();
 
-  server.use(bodyParser.json());
+  app.use(bodyParser.json());
+
+  app.use(session({ secret: 'my_precious_l@3' }));
+  app.use(passport.initialize());
+  app.use(passport.session()); 
 
   let compression = require('compression');
-      server.use(compression());
+      app.use(compression());
 
   mongoose.connect('mongodb://localhost:27017/pollingDB'); // Connect to MongoDB database for polling app.  
   // Make sure mongod is running! If not, log an error and exit. 
@@ -108,12 +127,12 @@ export function serveProd() {
   // ********** API ROUTES **************************
   // BEGIN API ROUTES
 
-  server.get('/api', function(req, res) {
+  app.get('/api', function(req, res) {
       return res.send('Default API route...');
   });
 
   // -------------- POLLS ROUTES --------------------
-  server.get('/api/polls', function(req, res) {
+  app.get('/api/polls', function(req, res) {
     Poll.find({}, function (err, polls) {
         res.json(polls);
     });   
@@ -121,7 +140,7 @@ export function serveProd() {
 
   //server.get('/api/items', pollsController.getAllPolls); // Handle GET request at /polls endpoint to retrieve all the polls
 
-  server.post('/api/polls', function(req, res) {
+  app.post('/api/polls', function(req, res) {
     // Create a new poll
 
     let poll = new Poll({
@@ -139,14 +158,14 @@ export function serveProd() {
 
   });
 
-  server.get('/api/polls/:id', function(req, res) {
+  app.get('/api/polls/:id', function(req, res) {
     let id = req.params.id;
     Poll.findOne({'_id':id},function(err, result) {
       return res.send(result);
     });             
   });
 
-  server.put('/api/polls/:id', function(req, res) {
+  app.put('/api/polls/:id', function(req, res) {
     //let id = req.params.id;
     //console.log('Will update poll with id of: ', id);
 
@@ -166,7 +185,7 @@ export function serveProd() {
    
   });
 
-  server.delete('/api/polls/:id', function(req, res) {
+  app.delete('/api/polls/:id', function(req, res) {
     //return res.send('API Route to DELETE a poll with id of: ' + req.params.id);
     let id = req.params.id;
     Poll.remove({'_id': id},function(result) {
@@ -178,13 +197,13 @@ export function serveProd() {
   });  
 
   // -------------- USERS ROUTES --------------------
-  server.get('/api/users', function(req, res) {
+  app.get('/api/users', function(req, res) {
     User.find({}, function (err, users) {
         res.json(users);
     });  
   }); 
 
-  server.post('/api/users', function(req, res) {
+  app.post('/api/users', function(req, res) {
     // Create a new User
     let user = new User({
       firstName: req.body.firstName,
@@ -202,7 +221,7 @@ export function serveProd() {
 
   });  
 
-  server.get('/api/users/:id', function(req, res) {
+  app.get('/api/users/:id', function(req, res) {
     // Return all users
     return res.send('User Specific API for user with id of: ' + req.params.id);
   });  
@@ -211,14 +230,14 @@ export function serveProd() {
   // ************************************************
 
 
-  server.use(APP_BASE, serveStatic(root));
+  app.use(APP_BASE, serveStatic(root));
 
-  server.use(fallback('index.html', { root }));
+  app.use(fallback('index.html', { root }));
 
-  //server.use('/api', router);
-  //server.get('/polls', mainController.getAllPolls); // Handle GET request at /polls endpoint to retrieve all the polls
+  //app.use('/api', router);
+  //app.get('/polls', mainController.getAllPolls); // Handle GET request at /polls endpoint to retrieve all the polls
 
-  server.listen(PORT, () =>
+  app.listen(PORT, () =>
     openResource('http://localhost:' + PORT + APP_BASE)
   );
 };

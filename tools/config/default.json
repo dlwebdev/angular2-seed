@@ -1,0 +1,19 @@
+{  
+  "database-configuration": {
+    "host": "localhost",
+    "user": "user",
+    "pass": "pass",
+    "name": "dbName"
+  },
+
+  "oauthCredentials": {
+    "twitter": {
+        "id": "GbXot4je0XFvQjwetqdjABHVM",
+        "secret": "v0ZK7uzEdx2JS7fdjcxP9oqaosluorpfYLERIvnCgC2aYzGNGE"
+    }
+  },
+
+  "oauthCallbacks": {
+    "twitterCallbackUrl" : "http://127.0.0.1:3000/auth/twitter/callback"
+  }
+}
