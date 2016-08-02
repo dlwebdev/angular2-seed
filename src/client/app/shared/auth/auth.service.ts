@@ -53,7 +53,7 @@ export class AuthenticationService {
 
     if(!resp.authenticated) {
       // Allow to proceed
-      this._router.navigate(['Login']);
+      this._router.navigate(['login']);
     }
   }
 
