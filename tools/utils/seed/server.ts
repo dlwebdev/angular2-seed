@@ -241,6 +241,15 @@ export function serveProd() {
       res.redirect('/');
   });
 
+
+  app.get('/user/authenticated', function(req, res, next) {
+    let authed = false;
+    if (req.isAuthenticated()) {
+      authed = true;
+    }
+    res.json({'authenticated': authed});
+  });
+
   // Twitter Auth API
 
   // =====================================

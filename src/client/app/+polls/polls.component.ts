@@ -46,6 +46,7 @@ export class PollsComponent implements OnInit {
    * Get the names OnInit
    */
   ngOnInit() {
+    // Check credentials. Will send to login screen if they are not logged in.
     this.authenticationService.checkCredentials();
     this.getPolls();
   }

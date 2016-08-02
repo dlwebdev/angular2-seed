@@ -48,39 +48,25 @@ export class AuthenticationService {
     */
   }   
 
-  twitterLogin(user: User): Observable<string[]> {    
-    console.log('User passed to login: ', user);
+  doCheck(resp:any) {
+    //console.log('Authenticated: ', resp.authenticated);
 
-    let twitterLoginResponse = this.http.get('/auth/twitter')
-                    .map((res: Response) => res.json())
-                    .catch(this.handleError);
-    // /auth/twitter
-
-    console.log('twitterLoginResponse: ', twitterLoginResponse);
-
-    return twitterLoginResponse;
-
-    /*
-
-    var authenticatedUser = users.find(u => u.email === user.email);
-    
-    console.log('Authenticated User: ', authenticatedUser);
-
-    if (authenticatedUser && authenticatedUser.password === user.password) {
-      localStorage.setItem('user', JSON.stringify(authenticatedUser));
-      this._router.navigate(['polls']);      
-      return true;
-    }
-
-    return false;
-    */
-  }    
-
-  checkCredentials() {
-    if (localStorage.getItem('user') === null) {
-        this._router.navigate(['login']);
+    if(!resp.authenticated) {
+      // Allow to proceed
+      this._router.navigate(['Login']);
     }
   }
+
+  checkCredentials() {
+    this.http.get('/user/authenticated')
+      .subscribe( resp => this.doCheck(resp.json()));
+  }
+
+  checkAuthenticated(): Observable<string[]> {
+    return this.http.get('/user/authenticated')
+      .map((res: Response) => res.json())
+      .catch(this.handleError);
+  }  
 
   private handleError (error: any) {
     // In a real world app, we might use a remote logging infrastructure

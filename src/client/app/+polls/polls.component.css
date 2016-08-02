@@ -13,18 +13,18 @@ ul {
 }
 
 .poll-list .glyphicon {
-	cursor:pointer;
-	font-size:20px;
+  cursor:pointer;
+  font-size:20px;
 }
 
 .poll-list .glyphicon-info-sign {
-	color: #106cc8;
+  color: #106cc8;
 }
 
-.poll-list .glyphicon-remove-sign{
-	color: red;
+.poll-list .glyphicon-remove-sign {
+  color: red;
 }
 
 .poll-list .glyphicon:hover {
-	color: #000;
+  color: #000;
 }
