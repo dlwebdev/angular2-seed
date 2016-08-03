@@ -29,8 +29,10 @@
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
-        <li><a [routerLink]="['login']">Login</a></li>
-		    <li><a href="#">Logout</a></li>
+        <li *ngIf="!loggedIn">
+          <a [routerLink]="['login']">Login</a>
+        </li>
+		    <li *ngIf="loggedIn"><a href="/user/logout">Logout</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

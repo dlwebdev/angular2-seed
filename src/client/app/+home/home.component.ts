@@ -51,7 +51,7 @@ export class HomeComponent implements OnInit {
         resp => {
           this.user = resp;
           if(this.user.userId !== '-1') {
-            console.log('This user is logged in. Do not show the log in button', this.user.userId);
+            //console.log('This user is logged in. Do not show the log in button', this.user.userId);
           }
         },
         error =>  this.errorMessage = <any>error

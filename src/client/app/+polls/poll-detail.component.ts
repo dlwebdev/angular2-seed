@@ -183,7 +183,7 @@ export class PollDetailComponent implements OnInit, OnDestroy {
       .subscribe(
         poll => {
           //this.poll = poll;
-          console.log('Poll returned: ', poll);
+          //console.log('Poll returned: ', poll);
         },
         error =>  this.errorMessage = <any>error
       );   

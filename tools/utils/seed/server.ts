@@ -109,7 +109,9 @@ export function serveProd() {
   let compression = require('compression');
       app.use(compression());
 
-  mongoose.connect('mongodb://localhost:27017/pollingDB'); // Connect to MongoDB database for polling app.  
+  mongoose.connect('mongodb://admin:admin@ds139705.mlab.com:39705/fcc-polling-app'); // Connect to MongoDB database for polling app.  
+  //mongoose.connect('mongodb://localhost:27017/pollingDB'); // Connect to MongoDB database for polling app.  
+
   // Make sure mongod is running! If not, log an error and exit. 
 
   mongoose.connection.on('error', function() {

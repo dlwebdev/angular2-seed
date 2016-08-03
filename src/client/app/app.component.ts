@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ROUTER_DIRECTIVES } from '@angular/router';
 import { HTTP_PROVIDERS } from '@angular/http';
 
-import { Config, AuthenticationService, NameListService, PollService, NavbarComponent, ToolbarComponent } from './shared/index';
+import { AuthenticationService, NameListService, PollService, NavbarComponent, ToolbarComponent } from './shared/index';
 
 //require('bootstrap');
 
@@ -19,6 +19,6 @@ import { Config, AuthenticationService, NameListService, PollService, NavbarComp
 })
 export class AppComponent {
   constructor() {
-    console.log('Environment config', Config);
+    //console.log('Environment config', Config);
   }
 }
