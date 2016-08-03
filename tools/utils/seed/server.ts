@@ -14,7 +14,7 @@ import * as bodyParser from 'body-parser';
 import * as codeChangeTool from './code_change_tools';
 import { APP_BASE, COVERAGE_PORT, DOCS_DEST, DOCS_PORT, PORT, PROD_DEST } from '../../config';
 
-let port = process.env.PORT || 5555;
+//let port = process.env.PORT || 5555;
 
 var Schema = mongoose.Schema;  
 
