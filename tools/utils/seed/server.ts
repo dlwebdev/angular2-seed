@@ -297,10 +297,10 @@ export function serveProd() {
   //app.use('/api', router);
   //app.get('/polls', mainController.getAllPolls); // Handle GET request at /polls endpoint to retrieve all the polls
 
-  app.listen(port, () =>
-    openResource('http://localhost:' + port + APP_BASE)
+  app.listen(PORT, () =>
+    openResource('http://localhost:' + PORT + APP_BASE)
   );
-  
+
 };
 
 function isLoggedIn(req:any, res:any, next:any) {
