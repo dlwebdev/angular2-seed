@@ -12,7 +12,8 @@ import * as mongoose from 'mongoose'; // Wrapper for interacting with MongoDB
 import * as bodyParser from 'body-parser'; 
 
 import * as codeChangeTool from './code_change_tools';
-import { APP_BASE, COVERAGE_PORT, DOCS_DEST, DOCS_PORT, PORT, PROD_DEST } from '../../config';
+//import { APP_BASE, COVERAGE_PORT, DOCS_DEST, DOCS_PORT, PORT, PROD_DEST } from '../../config';
+import { APP_BASE, COVERAGE_PORT, DOCS_DEST, DOCS_PORT, PROD_DEST } from '../../config';
 
 let port = process.env.PORT || 5555;
 
