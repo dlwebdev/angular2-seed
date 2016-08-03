@@ -14,7 +14,7 @@ import * as bodyParser from 'body-parser';
 import * as codeChangeTool from './code_change_tools';
 import { APP_BASE, COVERAGE_PORT, DOCS_DEST, DOCS_PORT, PORT, PROD_DEST } from '../../config';
 
-//let port = process.env.PORT || 5555;
+let port = process.env.PORT || 5555;
 
 var Schema = mongoose.Schema;  
 
@@ -297,9 +297,15 @@ export function serveProd() {
   //app.use('/api', router);
   //app.get('/polls', mainController.getAllPolls); // Handle GET request at /polls endpoint to retrieve all the polls
 
+  app.listen(port, function() {
+      console.log('Our app is running on ://localhost:' + port);
+  });
+
+  /*
   app.listen(PORT, () =>
     openResource('http://localhost:' + PORT + APP_BASE)
   );
+  */
 
 };
 
