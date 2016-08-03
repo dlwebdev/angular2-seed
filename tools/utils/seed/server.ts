@@ -222,6 +222,16 @@ export function serveProd() {
     }); 
   });  
 
+  app.get('/api/user/polls', function(req, res) {
+    if (req.isAuthenticated()) {
+      Poll.find({'creatorId': req.user._id}, function (err, polls) {
+          res.json(polls);
+      });
+    } else {
+      res.json({});
+    }
+  });    
+
   // END API ROUTES
   // ************************************************
 
@@ -249,6 +259,14 @@ export function serveProd() {
     }
     res.json({'authenticated': authed});
   });
+
+  app.get('/user/get-id-of-logged-in', function(req, res, next) {
+    if (req.isAuthenticated()) {
+      res.json({'userId': req.user._id});
+    } else {
+      res.json({'userId': '-1'});
+    }
+  });  
 
   // Twitter Auth API
 

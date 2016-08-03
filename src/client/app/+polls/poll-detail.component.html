@@ -2,19 +2,45 @@
 
 <div class="container">	
 	<div *ngIf="poll" class="voting-details">	
-		<h1>Cast Your Vote for {{ poll.name }}</h1>
+		<h1 class="text-center text-primary">{{ poll.name }}</h1>
 
-		<div class="row">
-			<div class="col-xs-12">
-			  <div class="btn-group btn-group-vertical" data-toggle="buttons">
+		<div *ngIf="!voted">
 
-			    <label *ngFor="let option of poll.options; let i = index;" (click)="setCurrentVote(i)" class="btn">
-			      <input type="radio" name='poll-vote'><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i> <span>  {{ option.text }}</span>
-			    </label>
+			<div class="row">
+				<div class="col-xs-12">
+				  <div class="btn-group btn-group-vertical" data-toggle="buttons">
 
-			  </div>
+				    <label *ngFor="let option of poll.options; let i = index;" (click)="setCurrentVote(i)" class="btn">
+				      <input type="radio" name='poll-vote'><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i> <span>  {{ option.text }}</span>
+				    </label>
+
+				  </div>
+				</div>
+			</div>	
+
+			<div *ngIf="user.userId !== '-1'" class="row">
+				<p>As a logged in user, you may add a new option to the poll. Doing so will also cast your vote for that new option.</p>			
+
+				<div *ngIf="!addingPollOption">
+					<input class="btn btn-default btn-lg" type="button" (click)="addPollOption()" value="Add Poll Option">
+				</div>
+
+				<div *ngIf="addingPollOption">
+					<div class="row">
+						<input type="text" [(ngModel)]="new_option" [ngModelOptions]="{standalone: true}" placeholder="new option"/>	
+					</div>
+					<div class="row button-container">
+						<button class="btn btn-success" (click)="saveOptionandCastVote()">Save Option and Cast Vote</button>
+						<button class="btn btn-warning" (click)="cancelNewOption()">Cancel New Option</button>
+					</div>											
+				</div>
 			</div>
-		</div>	
+
+		</div>
+
+		<div *ngIf="voted">
+			<p>Thank you for voting!</p>
+		</div>
 
 		<div *ngIf="showVotingContainer" class="row button-container vote-container">
 			<button class="btn btn-success" (click)="castVote()">Cast Vote</button>
@@ -23,6 +49,10 @@
 
 		<div *ngIf="!showVotingContainer" class="row button-container vote-container">
 			<button class="btn btn-default" (click)="cancel()">Back to Polls</button>			
+		</div>
+
+		<div class="row button-container">
+			<a class="twitter-share-button btn" role="button" target="_blank" href="https://twitter.com/intent/tweet?url=http://192.169.14.10:5555/poll-detail/{{poll._id}}&text=Vote on {{poll.name}}">Share Poll on Twitter</a>			
 		</div>
 
 		<nvd3 [options]="options" [data]="data"></nvd3>

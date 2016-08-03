@@ -18,7 +18,8 @@ import { AuthenticationService } from '../shared/index';
 export class PollsComponent implements OnInit {
 
   newName: string = '';
-  errorMessage: string;
+  errorMessage: string = '';
+  user: any = '';
 
   polls: any[] = [];
 
@@ -48,8 +49,19 @@ export class PollsComponent implements OnInit {
   ngOnInit() {
     // Check credentials. Will send to login screen if they are not logged in.
     this.authenticationService.checkCredentials();
-    this.getPolls();
+    this.getUserId();    
   }
+
+  getUserId() {
+    this.authenticationService.getUserId()
+      .subscribe(
+        resp => {
+          this.user = resp;
+          this.getUserPolls();
+        },
+        error =>  this.errorMessage = <any>error
+      );
+  }  
 
   addPollOption() {
     this.pollData.options.push({text: '', val: 0});
@@ -69,7 +81,7 @@ export class PollsComponent implements OnInit {
   }  
 
   createPoll() {
-    console.log('Poll Data: ', this.pollData);
+    this.pollData.creatorId = this.user.userId;
 
     this.pollService.postNewPoll(this.pollData)
       .subscribe(
@@ -78,13 +90,13 @@ export class PollsComponent implements OnInit {
       );
 
     this.resetPollData();
-    this.getPolls();
+    this.getUserPolls();
   }
 
   resetPollData() {
     this.pollData = {
       name: '',
-      creatorId: '',
+      creatorId: this.user.userId,
       options: [
         {text: 'Option 1', val: 0},
         {text: 'Option 2', val: 0}
@@ -96,8 +108,8 @@ export class PollsComponent implements OnInit {
   /**
    * Handle the pollService observable
    */
-  getPolls() {
-    this.pollService.getPolls()
+  getUserPolls() {
+    this.pollService.getUserPolls()
       .subscribe(
         polls => this.polls = polls,
         error =>  this.errorMessage = <any>error

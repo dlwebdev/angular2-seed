@@ -19,55 +19,39 @@ export class AuthenticationService {
   users: any[] = [];
 
   /**
-   * Creates a new PollService with the injected Http.
-   * @param {Http} http - The injected Http.
+   * Creates a new AuthenticationService with the injected Http.
+   * @param {Http} _http - The injected Http.
+   * @param {Router} _router - The injected _router.
    * @constructor
   */  
-  constructor(private _router: Router, private http: Http) { }
+  constructor(private _router: Router, private _http: Http) { }
 
   logout() {
     localStorage.removeItem('user'); 
     this._router.navigate(['Login']);
-  } 
-  
-  login(user: User) {    
-    console.log('User passed to login: ', user);
-    console.log('Users: ', this.users);
-    /*
-    var authenticatedUser = this.users.find(u => u.email === user.email);
-    
-    console.log('Authenticated User: ', authenticatedUser);
-
-    if (authenticatedUser && authenticatedUser.password === user.password) {
-      localStorage.setItem('user', JSON.stringify(authenticatedUser));
-      this._router.navigate(['polls']);      
-      return true;
-    }
-
-    return false;
-    */
   }   
 
   doCheck(resp:any) {
-    //console.log('Authenticated: ', resp.authenticated);
-
     if(!resp.authenticated) {
       // Allow to proceed
       this._router.navigate(['login']);
     }
   }
 
+  getUserId(): Observable<string[]> {
+    return this._http.get('/user/get-id-of-logged-in')
+      .map((res: Response) => res.json())
+      .catch(this.handleError);
+  }   
+
   checkCredentials() {
-    this.http.get('/user/authenticated')
+    this._http.get('/user/authenticated')
       .subscribe( resp => this.doCheck(resp.json()));
   }
 
-  checkAuthenticated(): Observable<string[]> {
-    return this.http.get('/user/authenticated')
-      .map((res: Response) => res.json())
-      .catch(this.handleError);
-  }  
-
+  /**
+    * Handle HTTP error
+  */
   private handleError (error: any) {
     // In a real world app, we might use a remote logging infrastructure
     // We'd also dig deeper into the error to get a better message
@@ -75,6 +59,6 @@ export class AuthenticationService {
       error.status ? `${error.status} - ${error.statusText}` : 'Server error';
     console.error(errMsg); // log to console instead
     return Observable.throw(errMsg);
-  }   
+  }      
 
 }

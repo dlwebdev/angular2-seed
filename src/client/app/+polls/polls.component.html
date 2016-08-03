@@ -1,22 +1,10 @@
-<!--
-<pre>
-	{{ polls | json}}
-</pre>
--->
+<!--<pre>{{ pollData | json}}</pre>-->
 
 <div class="container">	
-	<!--
-	<div class="jumbotron">	
-		<h1>Polling System</h1>
-		<h2>Current Polls (WILL BE behind login)</h2>
-	</div>
-	-->
 
 	<div class="row">
 		<div class="col-sm-6 col-sm-offset-3">
-			<h2 class="text-center text-primary">Your Current Polls</h2>
-			
-			<!--<div class="text-center">You have {{ polls.length }} Polls. You can view the current results or delete any of your polls shown.</div>-->
+			<h2 class="text-center text-primary">Your Current Polls</h2>		
 
 			<div class="list-group poll-list">
 				<div *ngFor="let poll of polls" class="list-group-item row">

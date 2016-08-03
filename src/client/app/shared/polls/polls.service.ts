@@ -18,11 +18,17 @@ export class PollService {
   */  
   constructor(private http: Http) {}
 
-  getPolls(): Observable<string[]> {
+  getAllPolls(): Observable<Object[]> {
     return this.http.get('/api/polls')
                     .map((res: Response) => res.json())
                     .catch(this.handleError);
   }  
+
+  getUserPolls(): Observable<string[]> {
+    return this.http.get('/api/user/polls')
+                    .map((res: Response) => res.json())
+                    .catch(this.handleError);
+  }   
 
   deletePoll(id:number): Observable<string[]> {
     return this.http.delete('/api/polls/' + id)
@@ -45,7 +51,7 @@ export class PollService {
       headers: headers
     }).map((res) => res.json().poll);
 
-  } 
+  }  
 
   postNewPoll(data:Object): Observable<string[]> {
     let headers = new Headers({

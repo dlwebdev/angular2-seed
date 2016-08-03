@@ -1,16 +1,25 @@
 <div class="container">
 	<div class="jumbotron">
-	  <h1>Current Polls</h1>
-	  <p>Click on any polls shown to vote or view results. You must be logged in to create a new poll.</p>
-	  <p><a class="btn btn-primary btn-lg" [routerLink]="['login']" role="button">Login</a></p>
+		<h1 class="text-center text-primary">Current Polls</h1>
+
+		<div *ngIf="user.userId === '-1'" class="text-center">
+			<p>Click on any polls shown to vote or view results. You must be logged in to create a new poll.</p>
+			<p><a class="btn btn-primary btn-lg" [routerLink]="['login']" role="button">Login</a></p>			
+		</div>
+
+		<div *ngIf="user.userId !== '-1'" class="text-center">
+			<p>Click on any polls shown to vote or view results.</p>
+			<p><a class="btn btn-primary btn-lg" [routerLink]="['polls']" role="button">Manage Your Polls</a></p>			
+		</div>
+
 	</div>
 
 	<p>
-	  All Polls in the system you can vote on.
+	  All user's polls in the system with the number of votes for each poll. Click on a poll to vote on it.
 	</p>
 
 	<div class="list-group">
-		<a *ngFor="let poll of polls" (click)="showPollDetail(poll._id)" class="list-group-item">{{ poll.name }}&nbsp;<span class="badge">14</span></a>
+		<a *ngFor="let poll of polls" (click)="showPollDetail(poll._id)" class="list-group-item">{{ poll.name }}&nbsp;<span class="badge">{{ poll.totalVotes }}</span></a>
 	</div>
 
 </div>

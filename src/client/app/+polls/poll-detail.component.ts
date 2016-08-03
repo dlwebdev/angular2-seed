@@ -7,6 +7,7 @@ import 'nvd3';
 import { nvD3 } from 'ng2-nvd3';
 declare let d3: any;
 
+import { AuthenticationService } from '../shared/index';
 import { PollService } from '../shared/index';
 
 /**
@@ -28,11 +29,15 @@ export class PollDetailComponent implements OnInit, OnDestroy {
   navigated = false; // true if navigated here
   poll: any;
   pollId: string;
-
+  user: any = '';
   options: any;
   data: any;
   data2: any;  
   currentVote: any;
+  addingPollOption: boolean = false;
+  voted: boolean = false;
+  new_option: string = '';
+  twitter_text: string = 'https://twitter.com/intent/tweet?text=';
 
   /**
    * Creates an instance of the PollsComponent with the injected
@@ -40,7 +45,12 @@ export class PollDetailComponent implements OnInit, OnDestroy {
    *
    * @param {PollService} pollService - The injected PollService.
    */
-  constructor(private pollService: PollService, private route: ActivatedRoute, private router: Router) { }
+  constructor(
+    private pollService: PollService, 
+    private authenticationService: AuthenticationService, 
+    private route: ActivatedRoute, 
+    private router: Router
+  ) { }
 
   /**
    * Get the names OnInit
@@ -69,11 +79,23 @@ export class PollDetailComponent implements OnInit, OnDestroy {
         };
       }
     });
+
+    this.getUserId(); 
  
   }
 
   ngOnDestroy() {
     this.sub.unsubscribe();
+  }  
+
+  getUserId() {
+    this.authenticationService.getUserId()
+      .subscribe(
+        resp => {
+          this.user = resp;
+        },
+        error =>  this.errorMessage = <any>error
+      );
   }  
 
   setChart() {
@@ -111,33 +133,32 @@ export class PollDetailComponent implements OnInit, OnDestroy {
       }
     ];
 
-    this.data2 = [
-      {
-        key: 'Cumulative Return',
-        values: [
-          {
-            'text' : 'A',
-            'val' : -29.765957771107
-          },
-          {
-            'text' : 'B',
-            'val' : 0
-          },
-          {
-            'text' : 'C',
-            'val' : 32.807804682612
-          }
-        ]
-      }
-    ];
+  }
 
+  addPollOption() {
+    this.addingPollOption = true;
+    this.showVotingContainer = false;
+  }
+
+  saveOptionandCastVote() {
+    this.poll.options.push({'text': this.new_option, 'val': 1});
+
+    this.savePoll();
+    this.setChart(); 
+    this.addingPollOption = false;
+    this.showVotingContainer = false;    
+  }
+
+  cancelNewOption() {
+    this.addingPollOption = false;
+    this.showVotingContainer = true;    
   }
 
   castVote() {
     this.showVotingContainer = false;
     this.poll.options[this.currentVote].val++;
 
-    this.incrementVote();
+    this.savePoll();
     this.setChart();
   }
 
@@ -153,7 +174,7 @@ export class PollDetailComponent implements OnInit, OnDestroy {
     this.currentVote = i;
   }
 
-  incrementVote() {
+  savePoll() {
     // Vote on an option in this poll. Update the poll to persist vote
 
     //console.log('Incrementing Vote for poll id of: ', this.pollId);
@@ -165,7 +186,9 @@ export class PollDetailComponent implements OnInit, OnDestroy {
           console.log('Poll returned: ', poll);
         },
         error =>  this.errorMessage = <any>error
-      );    
+      );   
+
+    this.voted = true; 
   }
 
   getPollData(id:any) {

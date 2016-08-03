@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { REACTIVE_FORM_DIRECTIVES } from '@angular/forms';
 
-import { AuthenticationService, User } from '../shared/index';
+import { AuthenticationService } from '../shared/index';
 
 /**
  * This class represents the lazy loaded HomeComponent.
@@ -21,15 +21,9 @@ export class LoginComponent {
    * @param {NameListService} nameListService - The injected NameListService.
   */
 
-  public user = new User('','');
-  public errorMsg = '';
+  //public user = new User('','');
+  //public errorMsg = '';
   
   constructor(private _service: AuthenticationService) { }
-
-  login() {
-      if(!this._service.login(this.user)) {
-        this.errorMsg = 'Failed to login';
-      }
-  }
 
 }
