@@ -14,6 +14,8 @@ import * as bodyParser from 'body-parser';
 import * as codeChangeTool from './code_change_tools';
 import { APP_BASE, COVERAGE_PORT, DOCS_DEST, DOCS_PORT, PORT, PROD_DEST } from '../../config';
 
+let port = process.env.PORT || 5555;
+
 var Schema = mongoose.Schema;  
 
 const userSchema = new Schema({
@@ -295,9 +297,10 @@ export function serveProd() {
   //app.use('/api', router);
   //app.get('/polls', mainController.getAllPolls); // Handle GET request at /polls endpoint to retrieve all the polls
 
-  app.listen(PORT, () =>
-    openResource('http://localhost:' + PORT + APP_BASE)
+  app.listen(port, () =>
+    openResource('http://localhost:' + port + APP_BASE)
   );
+  
 };
 
 function isLoggedIn(req:any, res:any, next:any) {
