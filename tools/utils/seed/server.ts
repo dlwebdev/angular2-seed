@@ -1,5 +1,5 @@
 import * as express from 'express';
-let session        = require('express-session');
+const session        = require('express-session');
 
 import * as fallback from 'express-history-api-fallback';
 import * as openResource from 'open';
@@ -7,17 +7,20 @@ import { resolve } from 'path';
 import * as serveStatic from 'serve-static';
 
 //var passport = require('passport');
-let passport       = require('passport');
+const passport       = require('passport');
 require('./passport')(passport);
 
 import * as mongoose from 'mongoose'; // Wrapper for interacting with MongoDB
+
+const MongoStore = require('connect-mongo')(session);
+
 import * as bodyParser from 'body-parser'; 
 
 import * as codeChangeTool from './code_change_tools';
 //import { APP_BASE, COVERAGE_PORT, DOCS_DEST, DOCS_PORT, PORT, PROD_DEST } from '../../config';
 import { APP_BASE, COVERAGE_PORT, DOCS_DEST, DOCS_PORT, PROD_DEST } from '../../config';
 
-let port = process.env.PORT || 5555;
+const port = process.env.PORT || 5555;
 
 var Schema = mongoose.Schema;  
 
@@ -108,7 +111,7 @@ export function serveProd() {
   app.use(bodyParser.json());
 
   //app.use(session({ secret: 'my_precious_l@3' }));
-  app.use(session({ secret: 'my_precious_l@3', cookie: { maxAge: 60000 }}))  
+  app.use(session({ secret: 'my_precious_l@3', cookie: { maxAge: 60000 }}));  
 
   app.use(passport.initialize());
   app.use(passport.session()); 
@@ -125,6 +128,10 @@ export function serveProd() {
     console.log('MongoDB Connection Error. Please make sure that MongoDB is running.');
     process.exit(1);
   });
+
+  app.use(session({
+      store: new MongoStore({ mongooseConnection: mongoose.connection })
+  }));
 
   // ********** API ROUTES **************************
   // BEGIN API ROUTES
