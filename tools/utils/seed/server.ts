@@ -108,12 +108,7 @@ export function serveProd() {
   app.use(bodyParser.json());
 
   //app.use(session({ secret: 'my_precious_l@3' }));
-
-  app.use(session({
-    secret: 'my_precious_l@3',
-    resave: false,
-    saveUninitialized: true
-  }));    
+  app.use(session({ secret: 'my_precious_l@3', cookie: { maxAge: 60000 }}))  
 
   app.use(passport.initialize());
   app.use(passport.session()); 
