@@ -108,13 +108,10 @@ export function serveProd() {
   let root = resolve(process.cwd(), PROD_DEST);
   let app = express();
 
-  app.use(bodyParser.json());
-
-  //app.use(session({ secret: 'my_precious_l@3' }));
-  app.use(session({ secret: 'my_precious_l@3', cookie: { maxAge: 60000 }}));  
+  app.use(bodyParser.json()); 
 
   app.use(passport.initialize());
-  app.use(passport.session()); 
+  //app.use(passport.session()); 
 
   let compression = require('compression');
       app.use(compression());
@@ -129,9 +126,14 @@ export function serveProd() {
     process.exit(1);
   });
 
-  app.use(session({
-      store: new MongoStore({ mongooseConnection: mongoose.connection })
-  }));
+  //app.use(session({ secret: 'my_precious_l@3' }));
+  app.use(session({ 
+    secret: 'my_precious_l@3', 
+    cookie: { maxAge: 60000 },
+    saveUninitialized: false, // don't create session until something stored 
+    resave: false, //don't save session if unmodified     
+    store: new MongoStore({ mongooseConnection: mongoose.connection })
+  })); 
 
   // ********** API ROUTES **************************
   // BEGIN API ROUTES
