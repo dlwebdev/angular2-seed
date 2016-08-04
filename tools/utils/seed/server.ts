@@ -5,6 +5,7 @@ import * as openResource from 'open';
 import { resolve } from 'path';
 import * as serveStatic from 'serve-static';
 
+//var passport = require('passport');
 let passport       = require('passport');
 require('./passport')(passport);
 
