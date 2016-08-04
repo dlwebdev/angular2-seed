@@ -1,5 +1,6 @@
 import * as express from 'express';
 let session        = require('express-session');
+
 import * as fallback from 'express-history-api-fallback';
 import * as openResource from 'open';
 import { resolve } from 'path';
@@ -106,7 +107,14 @@ export function serveProd() {
 
   app.use(bodyParser.json());
 
-  app.use(session({ secret: 'my_precious_l@3' }));
+  //app.use(session({ secret: 'my_precious_l@3' }));
+
+  app.use(session({
+    secret: 'my_precious_l@3',
+    resave: false,
+    saveUninitialized: true
+  }));    
+
   app.use(passport.initialize());
   app.use(passport.session()); 
 
