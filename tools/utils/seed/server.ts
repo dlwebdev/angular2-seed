@@ -10,30 +10,30 @@ import * as bodyParser from 'body-parser';
 import * as codeChangeTool from './code_change_tools';
 import { APP_BASE, COVERAGE_PORT, DOCS_DEST, DOCS_PORT, PROD_DEST } from '../../config';
 
-const port = process.env.PORT || 5555;
-const MongoStore = require('connect-mongo')(session);
-const Schema = mongoose.Schema;  
+var port = process.env.PORT || 5555;
+var MongoStore = require('connect-mongo')(session);
+var Schema = mongoose.Schema;  
 
 //let User = require('../../../src/server/models/User.js');
 
-const UserSchema2 = new Schema({
+var UserSchema2 = new Schema({
   username: {type: String, required: true},
   email: {type: String},
   twitter: Array,
   polls: [{type: Schema.Types.ObjectId, ref: 'Poll'}]
 });
-let User = mongoose.model('User', UserSchema2); 
+var User = mongoose.model('User', UserSchema2); 
 
-const pollSchema = new Schema({
+var pollSchema = new Schema({
   name: String,
   creatorId: String,
   options: Array,
   dateAdded: String,
   user: {type: Schema.Types.ObjectId, ref: 'User'}
 });
-const Poll = mongoose.model('Poll', pollSchema); 
+var Poll = mongoose.model('Poll', pollSchema); 
 
-const passport       = require('passport');
+var passport       = require('passport');
 require('./passport')(passport);
 
 
@@ -237,7 +237,7 @@ export function serveProd() {
 
   app.get('/api/user/polls', function(req, res) {
     let sess = req.session;
-  
+
     if(sess['passport']) {
       let userId = req.session['passport'].user;
 
