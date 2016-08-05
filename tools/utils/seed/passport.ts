@@ -4,21 +4,21 @@
 //var LocalStrategy    = require('passport-local').Strategy;
 //var FacebookStrategy = require('passport-facebook').Strategy;
 var TwitterStrategy  = require('passport-twitter').Strategy;
-const mongoose = require('mongoose');
+var mongoose = require('mongoose');
 
 // load up the user model
 //let User       = require('../../../src/server/models/User');
 
 var Schema = mongoose.Schema;  
 
-const UserSchema2 = new Schema({
+var UserSchema2 = new Schema({
   username: {type: String, required: true},
   email: {type: String},
   twitter: Array,
   polls: [{type: Schema.Types.ObjectId, ref: 'Poll'}]
 });
 
-let User2 = mongoose.model('User2', UserSchema2); 
+var User2 = mongoose.model('User2', UserSchema2); 
 
 // load the auth variables
 var configAuth = require('./auth');

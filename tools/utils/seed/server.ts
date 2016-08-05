@@ -1,7 +1,7 @@
 'use strict';
 
 import * as express from 'express';
-const session        = require('express-session');
+var session        = require('express-session');
 
 import * as fallback from 'express-history-api-fallback';
 import * as openResource from 'open';
