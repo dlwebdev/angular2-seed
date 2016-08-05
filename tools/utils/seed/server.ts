@@ -5,33 +5,24 @@ import * as fallback from 'express-history-api-fallback';
 import * as openResource from 'open';
 import { resolve } from 'path';
 import * as serveStatic from 'serve-static';
-
-//var passport = require('passport');
-const passport       = require('passport');
-require('./passport')(passport);
-
 import * as mongoose from 'mongoose'; // Wrapper for interacting with MongoDB
-
-const MongoStore = require('connect-mongo')(session);
-
 import * as bodyParser from 'body-parser'; 
-
 import * as codeChangeTool from './code_change_tools';
-//import { APP_BASE, COVERAGE_PORT, DOCS_DEST, DOCS_PORT, PORT, PROD_DEST } from '../../config';
 import { APP_BASE, COVERAGE_PORT, DOCS_DEST, DOCS_PORT, PROD_DEST } from '../../config';
 
 const port = process.env.PORT || 5555;
+const MongoStore = require('connect-mongo')(session);
+const Schema = mongoose.Schema;  
 
-var Schema = mongoose.Schema;  
+//let User = require('../../../src/server/models/User.js');
 
-const userSchema = new Schema({
-  firstName: {type: String, required: true},
-  lastName: {type: String, required: true},
-  password: {type: String, required: true},
-  email: {type: String, required: true, unique: true},
+const UserSchema2 = new Schema({
+  username: {type: String, required: true},
+  email: {type: String},
+  twitter: Array,
   polls: [{type: Schema.Types.ObjectId, ref: 'Poll'}]
 });
-const User = mongoose.model('userSchema', userSchema); 
+let User = mongoose.model('User', UserSchema2); 
 
 const pollSchema = new Schema({
   name: String,
@@ -40,7 +31,11 @@ const pollSchema = new Schema({
   dateAdded: String,
   user: {type: Schema.Types.ObjectId, ref: 'User'}
 });
-const Poll = mongoose.model('pollSchema', pollSchema); 
+const Poll = mongoose.model('Poll', pollSchema); 
+
+const passport       = require('passport');
+require('./passport')(passport);
+
 
 // load the auth variables
 require('./auth');
@@ -241,8 +236,14 @@ export function serveProd() {
   });  
 
   app.get('/api/user/polls', function(req, res) {
-    if (req.isAuthenticated()) {
-      Poll.find({'creatorId': req.user._id}, function (err, polls) {
+    let sess = req.session;
+  
+    if(sess['passport']) {
+      let userId = req.session['passport'].user;
+
+      console.log('Looking for polls with a creator id of: ', userId);
+
+      Poll.find({'creatorId': userId}, function (err, polls) {
           res.json(polls);
       });
     } else {
@@ -269,21 +270,35 @@ export function serveProd() {
       res.redirect('/');
   });
 
+  app.get('/auth/currentuser', function(req,res){
+      res.json(req.user);
+  });
 
   app.get('/user/authenticated', function(req, res, next) {
     let authed = false;
-    if (req.isAuthenticated()) {
+    let sess = req.session;
+
+    //if (req.isAuthenticated()) {
+    //  authed = true;
+    //}
+
+    if(sess['passport']) {      
       authed = true;
-    }
+    }      
+
     res.json({'authenticated': authed});
   });
 
   app.get('/user/get-id-of-logged-in', function(req, res, next) {
-    if (req.isAuthenticated()) {
-      res.json({'userId': req.user._id});
-    } else {
-      res.json({'userId': '-1'});
-    }
+    let sess = req.session;
+    let userId = '-1';
+
+    if(sess['passport']) {
+      //console.log('Passport detected in user session: ', sess['passport'].user);
+      userId = sess['passport'].user;
+    }  
+
+    res.json({'userId': userId});
   });  
 
   // Twitter Auth API
@@ -324,10 +339,12 @@ export function serveProd() {
 };
 
 function isLoggedIn(req:any, res:any, next:any) {
+  let sess = req.session;
 
-    // if user is authenticated in the session, carry on
-    if (req.isAuthenticated())
-        return next();
+  if(sess['passport']) {
+    //console.log('Passport detected in user session: ', sess['passport'].user);
+    return next();
+  }   
 
     // if they aren't redirect them to the home page
     res.redirect('/');

@@ -7,18 +7,18 @@ var TwitterStrategy  = require('passport-twitter').Strategy;
 const mongoose = require('mongoose');
 
 // load up the user model
-//var User       = require('../../../src/server/models/User');
+//let User       = require('../../../src/server/models/User');
 
 var Schema = mongoose.Schema;  
 
-const userSchema2 = new Schema({
+const UserSchema2 = new Schema({
   username: {type: String, required: true},
   email: {type: String},
   twitter: Array,
   polls: [{type: Schema.Types.ObjectId, ref: 'Poll'}]
 });
 
-const User = mongoose.model('userSchema2', userSchema2); 
+let User2 = mongoose.model('User2', UserSchema2); 
 
 // load the auth variables
 var configAuth = require('./auth');
@@ -32,7 +32,7 @@ module.exports = function(passport) {
 
     // used to deserialize the user
     passport.deserializeUser(function(id, done) {
-        User.findById(id, function(err, user) {
+        User2.findById(id, function(err, user) {
             done(err, user);
         });
     });
@@ -58,7 +58,7 @@ module.exports = function(passport) {
         process.nextTick(function() {  
         	//console.log('Checking for user with id of: ', profile.username);		    
 
-            User.findOne({ 'username' : profile.username }, function(err, user) {
+            User2.findOne({ 'username' : profile.username }, function(err, user) {
 
                 // if there is an error, stop everything and return that
                 // ie an error connecting to the database
@@ -70,7 +70,7 @@ module.exports = function(passport) {
                     return done(null, user); // user found, return that user
                 } else {
                     // if there is no user, create them
-                    var newUser                 = new User();
+                    var newUser                 = new User2();
 
                     // set all of the user data that we need
                     newUser.twitter.id          = profile.id;
